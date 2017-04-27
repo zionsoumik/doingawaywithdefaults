@@ -15,7 +15,8 @@ from Sentence import Sentence
 
 #GLOBALS
 rate = 0.02
-numberofsentences = 20000
+conservativerate = .005
+numberofsentences = 200
 language = "611"
 
 infoFile = open('EngFrJapGerm.txt','rU')
@@ -39,7 +40,7 @@ def createLD():
 ####   MAIN
 createLD()
 
-aChild = NDChild(rate)
+aChild = NDChild(rate, conservativerate)
 
 for i in range(numberofsentences):
     s = pickASentence(LD)

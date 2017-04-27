@@ -4,11 +4,11 @@
 # In[ ]:
 
 class NDChild(object):
-    def __init__ (self, learningrate):
+    def __init__ (self, learningrate, conslearningrate):
         
         self.grammar = {"SP": .5, "HIP": .5, "HCP": .5, "OPT": .5, "NS": .5, "NT": .5,"WHM": .5, "PI": .5, "TM": .5, "VtoI": .5, "ItoC": .5,"AH": .5, "QInv": .5}
         self.r = learningrate #simulation will pass child a learning rate
-          
+        self.conservativerate = conslearningrate
     
     def consumeSentence(self, s): #child is fed a list containing [lang, inflec, sentencestring]
         self.findEtrigger("SP", s)
@@ -17,7 +17,7 @@ class NDChild(object):
         #self.findEtrigger("OPT", s)
         #self.findEtrigger("NS", s)
         #self.findEtrigger("NT", s)
-        #self.findEtrigger("WHM", s)
+        self.findEtrigger("WHM", s)
         #self.findEtrigger("PI", s)
         #self.findEtrigger("TM", s)
         #self.findEtrigger("VtoI", s)
@@ -51,20 +51,7 @@ class NDChild(object):
                 elif s.sentenceList.index("Verb") == (s.sentenceList.index("O1") - 1):
                     self.adjustweight("HIP", 0, self.r)
             
-            #elif "O3" in s.sentenceList and "P" in s.sentenceList: #P followed by O3 and not topicalized
-             #   print s.sentenceList
-            #  Pindex = s.sentenceList.index("P")
-                #if Pindex > 0 and s.sentenceList.index("O3") == Pindex + 1:
-                #    self.adjustweight("HIP", 0, self.r)
-            #    O3index = s.sentneceList.index("O3")
-            #   if O3index < Pindex:
-            #       self.adjustweight("HIP", 0, self.r)
-            
-            #elif s.inflection == "IMP" and "O1" in s.sentenceList and "Verb" in s.sentenceList: #imperative and O1 follows V
-            #    if s.sentenceList.index("Verb") == (s.sentenceList.index("O1") - 1):
-            #        self.adjustweight("HIP", 0, self.r)
-                      
-            
+         
         elif parameter is "HCP": #third parameter Head in CP
             if s.inflection == "Q":
                 if s.sentenceList[-1] == 'ka' or ("ka" not in s.sentenceList and s.sentenceList[-1] == "Aux"): #ka or aux last in question
@@ -72,7 +59,27 @@ class NDChild(object):
                 
                 elif s.sentenceList[0] == "ka" or ("ka" not in s.sentenceList and s.sentenceList[0]=="Aux"): #ka or aux first in question
                     self.adjustweight("HCP", 0, self.r)
+        
+        elif parameter is "AH": 
+            if (s.inflection == "DEC" or s.inflection == "Q") and ("Aux" not in s.sentenceStr and "Never" in s.sentenceStr and "Verb" in s.sentenceStr and "O1" in s.sentenceStr):
+                neverPos = s.sentenceList.index("Never")
+                verbPos = s.sentenceList.index("Verb")
+                O1Pos = s.sentenceList.index("O1")
+            
+                if (neverPos > -1 and verbPos == neverPos+1 and O1Pos == neverPos+1) or (O1Pos > -1 and verbPos == O1Pos+1 and neverPos == verbPos + 1):
+                    self.adjustweight("AH", 1, self.r)
                     
+            ####NEED TO THINK ABOuT CODE TOWARDS 0
+        
+        elif parameter is "WHM":
+            if s.inflection == "Q" and "+WH" in s.sentenceList:
+                if ("+WH" in s.sentenceList[0]) or ("P" == s.sentenceList[0] and "O3[+WH]" == s.sentenceList[1]):
+                    self.adjustweight("WHM",1,self.conservativerate)
+                else:
+                    self.adjustweight("WHM",0,self.r)
+                    
+                
+         
                         
         else:
             raise ValueError("This parameter isn't implemented yet")
