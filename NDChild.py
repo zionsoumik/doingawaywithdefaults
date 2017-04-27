@@ -11,19 +11,19 @@ class NDChild(object):
         self.conservativerate = conslearningrate
     
     def consumeSentence(self, s): #child is fed a list containing [lang, inflec, sentencestring]
-        self.findEtrigger("SP", s)
-        self.findEtrigger("HIP", s)
-        self.findEtrigger("HCP", s)
-        #self.findEtrigger("OPT", s)
-        #self.findEtrigger("NS", s)
-        #self.findEtrigger("NT", s)
-        self.findEtrigger("WHM", s)
-        #self.findEtrigger("PI", s)
-        #self.findEtrigger("TM", s)
-        #self.findEtrigger("VtoI", s)
-        #self.findEtrigger("ItoC", s)
-        #self.findEtrigger("AH", s)
-        #self.findEtrigger("QInv", s)
+        self.findEtrigger("SP", s)    #parameter 1
+        self.findEtrigger("HIP", s)   #parameter 2
+        self.findEtrigger("HCP", s)   #parameter 3
+        #self.findEtrigger("OPT", s)  #parameter 4
+        #self.findEtrigger("NS", s)   #parameter 5
+        #self.findEtrigger("NT", s)   #parameter 6
+        self.findEtrigger("WHM", s)   #parameter 7
+        self.findEtrigger("PI", s)   #parameter 8
+        self.findEtrigger("TM", s)    #parameter 9
+        #self.findEtrigger("VtoI", s) #parameter 10
+        #self.findEtrigger("ItoC", s) #parameter 11
+        self.findEtrigger("AH", s)    #parameter 12
+        #self.findEtrigger("QInv", s) #parameter 13
       
     #etriggers for parameters
     
@@ -62,21 +62,72 @@ class NDChild(object):
         
         elif parameter is "AH": 
             if (s.inflection == "DEC" or s.inflection == "Q") and ("Aux" not in s.sentenceStr and "Never" in s.sentenceStr and "Verb" in s.sentenceStr and "O1" in s.sentenceStr):
-                neverPos = s.sentenceList.index("Never")
-                verbPos = s.sentenceList.index("Verb")
-                O1Pos = s.sentenceList.index("O1")
+                neverPos = s.indexString("Never")
+                verbPos = s.indexString("Verb")
+                O1Pos = s.indexString("O1")
             
-                if (neverPos > -1 and verbPos == neverPos+1 and O1Pos == neverPos+1) or (O1Pos > -1 and verbPos == O1Pos+1 and neverPos == verbPos + 1):
+                if (neverPos > -1 and verbPos == neverPos+1 and O1Pos == verbPos+1) or (O1Pos > -1 and verbPos == O1Pos+1 and neverPos == verbPos + 1):
                     self.adjustweight("AH", 1, self.r)
                     
             ####NEED TO THINK ABOuT CODE TOWARDS 0
         
         elif parameter is "WHM":
-            if s.inflection == "Q" and "+WH" in s.sentenceList:
+            if s.inflection == "Q" and "+WH" in s.sentenceStr:
                 if ("+WH" in s.sentenceList[0]) or ("P" == s.sentenceList[0] and "O3[+WH]" == s.sentenceList[1]):
                     self.adjustweight("WHM",1,self.conservativerate)
                 else:
                     self.adjustweight("WHM",0,self.r)
+        
+        elif parameter is "PI":
+            if "P" in s.sentenceList and "O3" in s.sentenceList:
+                if abs(s.indexString("P") - s.indexString("O3")) > 1:
+                    self.adjustweight("PI", 1, self.r)
+                
+                elif s.inflection == "Q" and ((s.indexString("P") + s.indexString("O3")) == 1):
+                    self.adjustweight ("PI",0,self.r)
+                    
+        
+        
+        elif parameter is "TM":
+            if "[+WA]" in s.sentenceStr:
+                self.adjustweight("TM",1,self.r)
+            elif "O1" in s.sentenceList and "O2" in s.sentenceList and (abs(s.sentenceList.index("O1")-s.sentenceList.index("O2")) > 1):
+                self.adjustweight("TM",0,self.r)
+                
+        elif parameter is "ItoC":
+            sp = self.grammar['SP']
+            hip = self.grammar['HIP']
+            hcp = self.grammar['HCP']
+
+            if sp < 0.5 and hip < 0.5: # (Word orders 1, 5)
+                Sindex = s.sentenceList.index("S")
+                if (Sindex > 0 and s.inflection == "DEC") and s.sentenceList.index("Aux") == Sindex + 1:
+                    self.adjustweight("ItoC", 0, self.r)
+
+            elif sp > 0.5 and hip > 0.5: # (Word orders 2, 6)
+                if (s.inflection == "DEC"):
+                    AuxIndex = s.sentenceList.index("Aux")
+                    if (AuxIndex > 0 and s.sentenceList.index("S") == AuxIndex + 1):
+                        self.adjustweight("ItoC", 0, self.r)
+
+            elif sp > 0.5 and hip < 0.5 and hcp > 0.5 and s.inflection == "DEC":
+                if s.sentenceList.index("Verb") == s.sentenceList.index("Aux") + 1:
+                    self.adjustweight("ItoC", 0, self.r)
+
+            elif sp < 0.5 and hip > 0.5 and hcp < 0.5 and s.inflection == "DEC":
+                if s.sentenceList.index("Aux") == s.sentenceList.index("Verb") + 1:
+                    self.adjustweight("ItoC", 0, self.r)
+
+            elif sp > 0.5 and hip < 0.5 and hcp < 0.5 and ('ka' in s.sentenceList):
+                if s.inflection == "DEC" and "Aux" not in s.sentence:
+                    if (s.sentenceList.index("Verb") == s.sentenceList.index("Never") + 1):
+                        self.adjustweight("ItoC", 0, self.r)
+
+            elif sp < 0.5 and hip > 0.5 and hcp > 0.5 and ('ka' in s.sentenceList):
+                if s.inflection == "DEC" and "Aux" not in s.sentence:
+                    if s.sentenceList.index("Never") == s.sentenceList.index("Verb") + 1:
+                        self.adjustweight("ItoC", 0, self.r)
+                
                     
                 
          
