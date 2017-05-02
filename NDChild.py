@@ -15,7 +15,7 @@ class NDChild(object):
         self.findEtrigger("HIP", s)   #parameter 2
         self.findEtrigger("HCP", s)   #parameter 3
         #self.findEtrigger("OPT", s)  #parameter 4
-        #self.findEtrigger("NS", s)   #parameter 5
+        self.findEtrigger("NS", s)   #parameter 5
         #self.findEtrigger("NT", s)   #parameter 6
         self.findEtrigger("WHM", s)   #parameter 7
         self.findEtrigger("PI", s)   #parameter 8
@@ -60,6 +60,14 @@ class NDChild(object):
                 elif s.sentenceList[0] == "ka" or ("ka" not in s.sentenceList and s.sentenceList[0]=="Aux"): #ka or aux first in question
                     self.adjustweight("HCP", 0, self.r)
         
+        elif parameter is "NS":
+            if s.inflection == "DEC" and "S" not in s.sentenceStr:                    
+                self.adjustweight("NS",1,self.r)
+            elif s.inflection == "DEC" and "S" in s.sentenceStr:
+                    self.adjustweight("NS",0,self.conservativerate)
+        ###### MUST ADD OUT OF OBLIQUENESS ORDER !!!
+        
+        
         elif parameter is "AH": 
             if (s.inflection == "DEC" or s.inflection == "Q") and ("Aux" not in s.sentenceStr and "Never" in s.sentenceStr and "Verb" in s.sentenceStr and "O1" in s.sentenceStr):
                 neverPos = s.indexString("Never")
@@ -82,9 +90,10 @@ class NDChild(object):
             if "P" in s.sentenceList and "O3" in s.sentenceList:
                 if abs(s.indexString("P") - s.indexString("O3")) > 1:
                     self.adjustweight("PI", 1, self.r)
-                
-                elif s.inflection == "Q" and ((s.indexString("P") + s.indexString("O3")) == 1):
+            
+                elif ((s.indexString("P") + s.indexString("O3")) == 1):
                     self.adjustweight ("PI",0,self.r)
+            
                     
         
         

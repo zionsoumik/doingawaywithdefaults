@@ -1,7 +1,7 @@
 
 # coding: utf-8
 
-# In[8]:
+# In[11]:
 
 from NDChild import NDChild
 from time import clock
@@ -16,7 +16,7 @@ from Sentence import Sentence
 #GLOBALS
 rate = 0.02
 conservativerate = 0.005
-numberofsentences = 2000
+numberofsentences = 200000
 
 #language = "611" #English
 #language = "584" #French
