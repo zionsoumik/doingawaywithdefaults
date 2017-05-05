@@ -61,12 +61,18 @@ class NDChild(object):
                     self.adjustweight("HCP", 0, self.r)
         
         elif parameter is "NS":
-            if s.inflection == "DEC" and "S" not in s.sentenceStr:                    
+            if s.inflection == "DEC" and "S" not in s.sentenceStr and s.outOblique():                    
                 self.adjustweight("NS",1,self.r)
             elif s.inflection == "DEC" and "S" in s.sentenceStr:
                     self.adjustweight("NS",0,self.conservativerate)
-        ###### MUST ADD OUT OF OBLIQUENESS ORDER !!!
+      
         
+        elif parameter is "NT":
+            if s.inflection == "DEC" and "O2" in s.sentenceStr and "O1" not in s.sentenceStr:
+                self.adjustweight("NT",1,self.r)
+            #### NOT DONE ###
+
+                
         
         elif parameter is "AH": 
             if (s.inflection == "DEC" or s.inflection == "Q") and ("Aux" not in s.sentenceStr and "Never" in s.sentenceStr and "Verb" in s.sentenceStr and "O1" in s.sentenceStr):
@@ -94,7 +100,6 @@ class NDChild(object):
                 elif ((s.indexString("P") + s.indexString("O3")) == 1):
                     self.adjustweight ("PI",0,self.r)
             
-                    
         
         
         elif parameter is "TM":
