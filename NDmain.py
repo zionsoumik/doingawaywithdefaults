@@ -1,8 +1,3 @@
-
-# coding: utf-8
-
-# In[3]:
-
 from NDChild import NDChild
 from time import clock
 from random import choice
@@ -12,6 +7,7 @@ import os
 from sys import argv
 from argparse import ArgumentParser
 from Sentence import Sentence
+import NDresults
 
 #GLOBALS
 rate = 0.02
@@ -29,7 +25,7 @@ infoFile = open('EngFrJapGerm.txt','rU')
 LD = []
 
 def pickASentence(languageDomain):
-    
+
     return choice(languageDomain)
 
 def createLD():
@@ -39,33 +35,27 @@ def createLD():
         s = Sentence([grammStr, inflStr, sentenceStr]) #constructor creates sentenceList
         if grammStr == language:
             LD.append(s)
-        
+
 
 
 ####   MAIN
 createLD()
+
+ndr = NDresults.NDresults()
+
+os.remove('output-simulation.csv')
+
+ndr.writeOutputHeader(611, 1, numberofsentences)
 
 aChild = NDChild(rate, conservativerate)
 
 for i in range(numberofsentences):
     s = pickASentence(LD)
     aChild.consumeSentence(s)
-    
+    ndr.checkIfParametersMeetThreshold(threshold, aChild.grammar, i)
+
+writeResults(aChild.grammar, i)
 
 print aChild.grammar
 
-        
-
 infoFile.close()
-
-
-
-# In[ ]:
-
-
-
-
-# In[ ]:
-
-
-
