@@ -49,17 +49,19 @@ if __name__ == '__main__':
         print('Arguments must be positive integers')
         sys.exit(2)
 
+    # Make an instance of NDresults and write the header for the output file
     ndr = NDresults()
     ndr.writeOutputHeader(language, numLearners, numberofsentences)
 
     for i in range(numLearners):
         LD = createLD(str(language))
-        print(LD)
         aChild = NDChild(rate, conservativerate)
 
         for j in range(numberofsentences):
             s = pickASentence(LD)
             aChild.consumeSentence(s)
+            # If a parameter value <= to the threshold for the first time,
+            # this is recorded in ndr for writing output
             ndr.checkIfParametersMeetThreshold(threshold, aChild.grammar, j)
 
         ndr.writeResults(aChild.grammar, i)

@@ -5,6 +5,8 @@ class NDresults(object):
     def __init__ (self):
         self.thresholdDict = {"SP": -1, "HIP": -1, "HCP": -1, "OPT": -1, "NS": -1, "NT": -1, "WHM": -1, "PI": -1, "TM": -1, "VtoI": -1, "ItoC": -1,"AH": -1, "QInv": -1}
 
+    # Check if the threshold hasn't been met before and if so, check if current
+    # parameter value meets it
     def checkIfParametersMeetThreshold(self, threshold, grammar, currSentenceNum):
         for key, value in grammar.iteritems():
             if self.thresholdDict[key] < 0 and value <= threshold:
@@ -29,7 +31,6 @@ class NDresults(object):
             pList = ["SP", " ", "HIP", " ", "HCP", " ", "OPT", " ", "NS", " ", "NT", " ", "WHM", " ", "PI",
                              ' ', "TM", " ", "VtoI", " ", "ItoC", " ", "AH", " ", "QInv", " "]
             r4 = [' '] + ['{}'.format(p) for p in pList]
-            print(r4)
             outWriter.writerow(r4)
 
 
@@ -42,6 +43,7 @@ class NDresults(object):
             pList = ["SP", "HIP", "HCP", "OPT", "NS", "NT", "WHM", "PI", "TM", "VtoI", "ItoC","AH", "QInv"]
             r1 = [str1]
             for p in pList:
+                # Add the parameter value and at what sentence it met the threshold
                 r1.append(format(grammar[p], '.12f'))
                 r1.append(self.thresholdDict[p])
             outWriter.writerow(r1)
