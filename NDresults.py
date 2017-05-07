@@ -9,7 +9,7 @@ class NDresults(object):
     # parameter value meets it
     def checkIfParametersMeetThreshold(self, threshold, grammar, currSentenceNum):
         for key, value in grammar.iteritems():
-            if self.thresholdDict[key] < 0 and value <= threshold:
+            if self.thresholdDict[key] < 0 and (value <= threshold or value >= (1-threshold)):
                 self.thresholdDict[key] = currSentenceNum
 
 

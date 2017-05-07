@@ -53,8 +53,9 @@ if __name__ == '__main__':
     ndr = NDresults()
     ndr.writeOutputHeader(language, numLearners, numberofsentences)
 
+    LD = createLD(str(language))
     for i in range(numLearners):
-        LD = createLD(str(language))
+        tempNdr = NDresults()
         aChild = NDChild(rate, conservativerate)
 
         for j in range(numberofsentences):
@@ -62,9 +63,8 @@ if __name__ == '__main__':
             aChild.consumeSentence(s)
             # If a parameter value <= to the threshold for the first time,
             # this is recorded in ndr for writing output
-            ndr.checkIfParametersMeetThreshold(threshold, aChild.grammar, j)
+            tempNdr.checkIfParametersMeetThreshold(threshold, aChild.grammar, j)
 
-        ndr.writeResults(aChild.grammar, i)
-        print aChild.grammar
+        tempNdr.writeResults(aChild.grammar, i)
 
     infoFile.close()
