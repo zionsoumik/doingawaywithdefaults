@@ -16,7 +16,7 @@ class NDChild(object):
         self.findEtrigger("HCP", s)   #parameter 3
         #self.findEtrigger("OPT", s)  #parameter 4
         self.findEtrigger("NS", s)   #parameter 5
-        #self.findEtrigger("NT", s)   #parameter 6
+        self.findEtrigger("NT", s)   #parameter 6
         self.findEtrigger("WHM", s)   #parameter 7
         self.findEtrigger("PI", s)   #parameter 8
         self.findEtrigger("TM", s)    #parameter 9
@@ -70,8 +70,10 @@ class NDChild(object):
         elif parameter is "NT":
             if s.inflection == "DEC" and "O2" in s.sentenceStr and "O1" not in s.sentenceStr:
                 self.adjustweight("NT",1,self.r)
-            #### NOT DONE ###
-
+            
+            elif s.inflection == "DEC" and "O2" in s.sentenceStr and "O1" in s.sentenceStr and "O3" in s.sentenceStr and "S" in s.sentenceStr and "Adv" in s.sentenceStr:   
+                self.adjustweight("NT",0,self.conservativerate)
+            #if all possible complements of VP are in sentence, then the sentence is not Null Topic
                 
         
         elif parameter is "AH": 
