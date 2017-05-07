@@ -44,4 +44,4 @@ class NDresults(object):
             for p in pList:
                 r1.append(format(grammar[p], '.12f'))
                 r1.append(self.thresholdDict[p])
-                outWriter.writerow(r1)
+            outWriter.writerow(r1)
