@@ -25,7 +25,6 @@ infoFile = open('EngFrJapGerm.txt','rU')
 LD = []
 
 def pickASentence(languageDomain):
-
     return choice(languageDomain)
 
 def createLD():
@@ -36,24 +35,21 @@ def createLD():
         if grammStr == language:
             LD.append(s)
 
+if __name__ == '__main__':
+    createLD()
 
+    ndr = NDresults.NDresults()
+    ndr.writeOutputHeader(611, 1, numberofsentences)
 
-####   MAIN
-createLD()
+    aChild = NDChild(rate, conservativerate)
 
-ndr = NDresults.NDresults()
+    for i in range(numberofsentences):
+        s = pickASentence(LD)
+        aChild.consumeSentence(s)
+        ndr.checkIfParametersMeetThreshold(threshold, aChild.grammar, i)
 
-ndr.writeOutputHeader(611, 1, numberofsentences)
+    ndr.writeResults(aChild.grammar, i)
 
-aChild = NDChild(rate, conservativerate)
+    print aChild.grammar
 
-for i in range(numberofsentences):
-    s = pickASentence(LD)
-    aChild.consumeSentence(s)
-    ndr.checkIfParametersMeetThreshold(threshold, aChild.grammar, i)
-
-writeResults(aChild.grammar, i)
-
-print aChild.grammar
-
-infoFile.close()
+    infoFile.close()
