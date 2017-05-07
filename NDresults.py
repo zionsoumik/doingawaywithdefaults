@@ -1,17 +1,18 @@
 class NDResults(object):
     def __init__ (self):
-        self.metThreshold = {"SP": False, "HIP": False, "HCP": False, "OPT": False, "NS": False, "NT": False, "WHM": False, "PI": False, "TM": False, "VtoI": False, "ItoC": False, "AH": False, "QInv": False}
-        self.thresholdDict = {"SP": 0, "HIP": 0, "HCP": 0, "OPT": 0, "NS": 0, "NT": 0, "WHM": 0, "PI": 0, "TM": 0, "VtoI": 0, "ItoC": 0,"AH": 0, "QInv": 0}
+        self.thresholdDict = {"SP": -1, "HIP": -1, "HCP": -1, "OPT": -1, "NS": -1, "NT": -1, "WHM": -1, "PI": -1, "TM": -1, "VtoI": -1, "ItoC": -1,"AH": -1, "QInv": -1}
 
     def checkIfParametersMeetThreshold(self, threshold, grammar, currSentenceNum):
         for key, value in grammar.iteritems():
-            if not metThreshold[key] and value <= threshold:
+            if thresholdDict[key] < 0 and value <= threshold:
                 self.thresholdDict[key] = currSentenceNum
-                self.metThreshold[key] = True
 
 
     # Write the header columns to the output file
     def writeOutputHeader(self, language_code, numEChildren, numSentences):
+        # Delete the old version of the output file
+        os.remove('output-simulation.csv')
+
         languageDict = {611:'English', 584:'French', 2253:'German', 584:'Japanese'}
         with open('output-simulation.csv',"a+") as outFile:
             writer = csv.writer(outFile)

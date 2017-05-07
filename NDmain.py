@@ -43,8 +43,6 @@ createLD()
 
 ndr = NDresults.NDresults()
 
-os.remove('output-simulation.csv')
-
 ndr.writeOutputHeader(611, 1, numberofsentences)
 
 aChild = NDChild(rate, conservativerate)
