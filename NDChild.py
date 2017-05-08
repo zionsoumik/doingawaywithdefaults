@@ -15,12 +15,12 @@ class NDChild(object):
         self.findEtrigger("HIP", s)   #parameter 2
         self.findEtrigger("HCP", s)   #parameter 3
         #self.findEtrigger("OPT", s)  #parameter 4
-        self.findEtrigger("NS", s)   #parameter 5
-        self.findEtrigger("NT", s)   #parameter 6
+        self.findEtrigger("NS", s)    #parameter 5
+        self.findEtrigger("NT", s)    #parameter 6
         self.findEtrigger("WHM", s)   #parameter 7
-        self.findEtrigger("PI", s)   #parameter 8
+        self.findEtrigger("PI", s)    #parameter 8
         self.findEtrigger("TM", s)    #parameter 9
-        #self.findEtrigger("VtoI", s) #parameter 10
+        self.findEtrigger("VtoI", s)  #parameter 10
         #self.findEtrigger("ItoC", s) #parameter 11
         self.findEtrigger("AH", s)    #parameter 12
         #self.findEtrigger("QInv", s) #parameter 13
@@ -63,7 +63,7 @@ class NDChild(object):
         elif parameter is "NS":
             if s.inflection == "DEC" and "S" not in s.sentenceStr and s.outOblique():                    
                 self.adjustweight("NS",1,self.r)
-            elif s.inflection == "DEC" and "S" in s.sentenceStr:
+            elif s.inflection == "DEC" and "S" in s.sentenceStr and s.outOblique():
                     self.adjustweight("NS",0,self.conservativerate)
       
         
@@ -103,13 +103,18 @@ class NDChild(object):
                     self.adjustweight ("PI",0,self.r)
             
         
-        
         elif parameter is "TM":
             if "[+WA]" in s.sentenceStr:
                 self.adjustweight("TM",1,self.r)
             elif "O1" in s.sentenceList and "O2" in s.sentenceList and (abs(s.sentenceList.index("O1")-s.sentenceList.index("O2")) > 1):
                 self.adjustweight("TM",0,self.r)
-                
+        
+        elif parameter is "VtoI":
+            if "Verb" in s.sentenceList and "O1" in s.sentenceList:
+                o1index = s.indexString("O1")
+                if o1index != 0 and abs(s.indexString("Verb") - o1index) > 1:
+                    self.adjustweight("VtoI", 1, self.r)
+        
         elif parameter is "ItoC":
             sp = self.grammar['SP']
             hip = self.grammar['HIP']
