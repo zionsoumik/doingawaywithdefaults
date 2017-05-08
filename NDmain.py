@@ -9,7 +9,6 @@ from Sentence import Sentence
 #GLOBALS
 rate = 0.02
 conservativerate = 0.01
-#numberofsentences = 200000
 threshold = .001
 
 infoFile = open('EngFrJapGerm.txt','rU')
@@ -18,13 +17,16 @@ def pickASentence(languageDomain):
     return choice(languageDomain)
 
 def createLD(language):
+    print("language: ", language)
+    languageDict = {'english': '611', 'french': '584', 'german': '2253', 'japanese': '3856'}
+    langNum = languageDict[language]
     LD = []
     for line in infoFile:
         [grammStr, inflStr, sentenceStr] = line.split("\t")
         sentenceStr = sentenceStr.rstrip()
         # constructor creates sentenceList
         s = Sentence([grammStr, inflStr, sentenceStr])
-        if grammStr == language:
+        if grammStr == langNum:
             LD.append(s)
     return LD
 
@@ -34,10 +36,13 @@ if __name__ == '__main__':
     # The argument keeps track of the mandatory arguments,
     #number of learners, max number of sentences, and target grammar
     parser = ArgumentParser(prog='Doing Away With Defaults', description='Set simulation parameters for learners')
-    parser.add_argument('integers', metavar='int', type=int, nargs=3,
+    parser.add_argument('integers', metavar='int', type=int, nargs=2,
                         help='(1) The number of learners (2) The number of '
-                         'sentences consumed (3) The target grammar\'s code '
-                          '(English=611, German=2253, French=584, Japanese=3856)')
+                         'sentences consumed')
+    parser.add_argument('strings', metavar='str', type=str, nargs=1,
+                        help='The name of the language that will be used.'
+                                'The current options are English=611, '
+                                'German=2253, French=584, Japanese=3856')
 
     args = parser.parse_args()
     numLearners = 0
@@ -47,7 +52,8 @@ if __name__ == '__main__':
     # can be converted to positive integers
     numLearners = args.integers[0]
     numberofsentences = args.integers[1]
-    language = args.integers[2]
+    language = str(args.strings[0]).lower()
+     
     if numLearners < 1 or numberofsentences < 1:
         print('Arguments must be positive integers')
         sys.exit(2)
@@ -56,9 +62,9 @@ if __name__ == '__main__':
     ndr = NDresults()
     ndr.writeOutputHeader(language, numLearners, numberofsentences)
 
-    LD = createLD(str(language))
+    LD = createLD(language)
     for i in range(numLearners):
-        tempNdr = NDresults()
+        ndr.resetThresholdDict()
         aChild = NDChild(rate, conservativerate)
 
         for j in range(numberofsentences):
@@ -66,9 +72,9 @@ if __name__ == '__main__':
             aChild.consumeSentence(s)
             # If a parameter value <= to the threshold for the first time,
             # this is recorded in ndr for writing output
-            tempNdr.checkIfParametersMeetThreshold(threshold, aChild.grammar, j)
+            ndr.checkIfParametersMeetThreshold(threshold, aChild.grammar, j)
 
-        tempNdr.writeResults(aChild.grammar, i)
+        ndr.writeResults(aChild.grammar, i)
 
     infoFile.close()
 
