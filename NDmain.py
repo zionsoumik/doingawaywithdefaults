@@ -17,7 +17,6 @@ def pickASentence(languageDomain):
     return choice(languageDomain)
 
 def createLD(language):
-    print("language: ", language)
     languageDict = {'english': '611', 'french': '584', 'german': '2253', 'japanese': '3856'}
     langNum = languageDict[language]
     LD = []
@@ -53,7 +52,7 @@ if __name__ == '__main__':
     numLearners = args.integers[0]
     numberofsentences = args.integers[1]
     language = str(args.strings[0]).lower()
-     
+
     if numLearners < 1 or numberofsentences < 1:
         print('Arguments must be positive integers')
         sys.exit(2)
