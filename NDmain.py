@@ -1,3 +1,4 @@
+from time import time
 from random import choice
 from argparse import ArgumentParser
 from argparse import ArgumentParser
@@ -28,6 +29,8 @@ def createLD(language):
     return LD
 
 if __name__ == '__main__':
+    start = time()
+
     # The argument keeps track of the mandatory arguments,
     #number of learners, max number of sentences, and target grammar
     parser = ArgumentParser(prog='Doing Away With Defaults', description='Set simulation parameters for learners')
@@ -68,3 +71,5 @@ if __name__ == '__main__':
         tempNdr.writeResults(aChild.grammar, i)
 
     infoFile.close()
+
+    end = time() - start

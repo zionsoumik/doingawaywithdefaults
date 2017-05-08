@@ -19,7 +19,7 @@ class NDresults(object):
         if path.exists('output-simulation.csv'):
             remove('output-simulation.csv')
 
-        languageDict = {611:'English', 584:'French', 2253:'German', 584:'Japanese'}
+        languageDict = {611:'English', 584:'French', 2253:'German', 3856:'Japanese'}
         with open('output-simulation.csv',"a+") as outFile:
             outWriter = writer(outFile)
             r1 = str(languageDict[language_code]) + str(language_code)
