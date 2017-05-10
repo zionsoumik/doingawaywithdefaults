@@ -76,16 +76,7 @@ class NDChild(object):
             #if all possible complements of VP are in sentence, then the sentence is not Null Topic
                 
         
-        elif parameter is "AH": 
-            if (s.inflection == "DEC" or s.inflection == "Q") and ("Aux" not in s.sentenceStr and "Never" in s.sentenceStr and "Verb" in s.sentenceStr and "O1" in s.sentenceStr):
-                neverPos = s.indexString("Never")
-                verbPos = s.indexString("Verb")
-                O1Pos = s.indexString("O1")
-            
-                if (neverPos > -1 and verbPos == neverPos+1 and O1Pos == verbPos+1) or (O1Pos > -1 and verbPos == O1Pos+1 and neverPos == verbPos + 1):
-                    self.adjustweight("AH", 1, self.r)
-                    
-            ####NEED TO THINK ABOuT CODE TOWARDS 0
+
         
         elif parameter is "WHM":
             if s.inflection == "Q" and "+WH" in s.sentenceStr:
@@ -114,6 +105,12 @@ class NDChild(object):
                 o1index = s.indexString("O1")
                 if o1index != 0 and abs(s.indexString("Verb") - o1index) > 1:
                     self.adjustweight("VtoI", 1, self.r)
+                    self.adjustweight("AH", 0, self.r)
+                    
+        #no need to explicitly check inflection because only Q and DEC have AUX    
+            elif "Aux" in s.sentenceList:
+                self.adjustweight("VtoI", 0, self.conservativerate)
+        
         
         elif parameter is "ItoC":
             sp = self.grammar['SP']
@@ -148,10 +145,20 @@ class NDChild(object):
                 if s.inflection == "DEC" and "Aux" not in s.sentence:
                     if s.sentenceList.index("Never") == s.sentenceList.index("Verb") + 1:
                         self.adjustweight("ItoC", 0, self.r)
-                
-                    
-                
-         
+            
+        elif parameter is "AH": 
+            if (s.inflection == "DEC" or s.inflection == "Q") and ("Aux" not in s.sentenceStr and "Never" in s.sentenceStr and "Verb" in s.sentenceStr and "O1" in s.sentenceStr):
+                neverPos = s.indexString("Never")
+                verbPos = s.indexString("Verb")
+                O1Pos = s.indexString("O1")
+            
+                if (neverPos > -1 and verbPos == neverPos+1 and O1Pos == verbPos+1) or (O1Pos > -1 and verbPos == O1Pos+1 and neverPos == verbPos + 1):
+                    self.adjustweight("AH", 1, self.r)
+                    self.adjustweight("VtoI", 0, self.r)
+            
+            elif "Aux" in s.sentenceStr:
+                self.adjustweight ("AH",0,self.conservativerate)
+
                         
         else:
             raise ValueError("This parameter isn't implemented yet")

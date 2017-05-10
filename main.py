@@ -1,7 +1,7 @@
 
 # coding: utf-8
 
-# In[11]:
+# In[6]:
 
 from NDChild import NDChild
 from time import clock
@@ -20,9 +20,9 @@ numberofsentences = 200000
 threshold = .001
 
 #language = "611" #English
-language = "584" #French
+#language = "584" #French
 #language = "2253" #German
-#language = "3856" #Japanese
+language = "3856" #Japanese
 
 infoFile = open('EngFrJapGerm.txt','rU')
 
