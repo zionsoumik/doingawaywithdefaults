@@ -8,7 +8,8 @@ from Sentence import Sentence
 
 #GLOBALS
 rate = 0.02
-conservativerate = 0.01
+# old rate conservativerate = 0.01
+conservativerate = 0.001
 threshold = .001
 
 infoFile = open('EngFrJapGerm.txt','rU')
