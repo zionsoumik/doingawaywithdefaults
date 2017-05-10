@@ -62,6 +62,7 @@ if __name__ == '__main__':
     ndr.writeOutputHeader(language, numLearners, numberofsentences)
 
     LD = createLD(language)
+    print("Starting the simulation...")
     for i in range(numLearners):
         ndr.resetThresholdDict()
         aChild = NDChild(rate, conservativerate)
@@ -74,7 +75,7 @@ if __name__ == '__main__':
             ndr.checkIfParametersMeetThreshold(threshold, aChild.grammar, j)
 
         ndr.writeResults(aChild.grammar, i)
-
+        print "Finished Child {}".format(i)
     infoFile.close()
 
     end = time() - start
