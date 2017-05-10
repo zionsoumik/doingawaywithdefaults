@@ -156,7 +156,7 @@ class NDChild(object):
                     self.adjustweight("AH", 1, self.r)
                     self.adjustweight("VtoI", 0, self.r)
             
-            elif "Aux" in s.sentenceStr:
+            elif "Aux" in s.sentenceStr and self.grammar["AH"] <= 0.5:
                 self.adjustweight ("AH",0,self.conservativerate)
 
                         
