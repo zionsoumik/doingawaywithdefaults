@@ -49,18 +49,3 @@ class NDresults(object):
                     r1.append(result[0][p])
                     r1.append(result[1][p])
                 outWriter.writerow(r1)
-
-
-    # Writes the final grammar and time (particular sentence) that each
-    # parameter of each eChild converged on to the output file
-    def writeSingleResult(self, grammar, num):
-        with open(self.outputfile,"a+") as outFile:
-            outWriter = writer(outFile)
-            str1 = 'eChild {}'.format(num)
-            pList = ["SP", "HIP", "HCP", "OPT", "NS", "NT", "WHM", "PI", "TM", "VtoI", "ItoC","AH", "QInv"]
-            r1 = [str1]
-            for p in pList:
-                # Add the parameter value and at what sentence it met the threshold
-                r1.append(format(grammar[p], '.12f'))
-                r1.append(self.thresholdDict[p])
-            outWriter.writerow(r1)

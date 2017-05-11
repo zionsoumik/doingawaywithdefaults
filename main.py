@@ -65,11 +65,11 @@ if __name__ == '__main__':
     LD = createLD(language)
     results = []
     print("Starting the simulation...")
-    for i in range(numLearners):
+    for i in xrange(numLearners):
         ndr.resetThresholdDict()
         aChild = NDChild(rate, conservativerate)
 
-        for j in range(numberofsentences):
+        for j in xrange(numberofsentences):
             s = pickASentence(LD)
             aChild.consumeSentence(s)
             # If a parameter value <= to the threshold for the first time,
