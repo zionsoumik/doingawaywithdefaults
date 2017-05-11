@@ -79,6 +79,7 @@ if __name__ == '__main__':
         results.append([aChild.grammar, ndr.thresholdDict])
         print "Finished Child {}".format(i)
     ndr.writeResults(results)
+
     infoFile.close()
 
-    end = time() - start
+    print("--- %s seconds ---" % (time() - start))
