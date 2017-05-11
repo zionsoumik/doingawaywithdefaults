@@ -38,9 +38,22 @@ class NDresults(object):
             outWriter.writerow(r4)
 
 
+    def writeResults(self, results):
+        with open(self.outputfile,"a+") as outFile:
+            outWriter = writer(outFile)
+            pList = ["SP", "HIP", "HCP", "OPT", "NS", "NT", "WHM", "PI", "TM", "VtoI", "ItoC","AH", "QInv"]
+            for index, result in enumerate(results):
+                str1 = 'eChild {}'.format(index)
+                r1 = [str1]
+                for p in pList:
+                    r1.append(result[0][p])
+                    r1.append(result[1][p])
+                outWriter.writerow(r1)
+
+
     # Writes the final grammar and time (particular sentence) that each
     # parameter of each eChild converged on to the output file
-    def writeResults(self, grammar, num):
+    def writeSingleResult(self, grammar, num):
         with open(self.outputfile,"a+") as outFile:
             outWriter = writer(outFile)
             str1 = 'eChild {}'.format(num)
