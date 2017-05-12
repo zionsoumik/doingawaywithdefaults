@@ -23,24 +23,31 @@ class NDChild(object):
     #etriggers for parameters
     # first parameter Subject Position
     def spEtrigger(self, s):
-        if "O1" in s.sentenceList and "S" in s.sentenceList and s.inflection == "DEC": #Check if O1 and S are in the sentence and sent is declarative
+        # Check if O1 and S are in the sentence and sent is declarative
+        if "O1" in s.sentenceList and "S" in s.sentenceList and s.inflection == "DEC":
             O1index = s.sentenceList.index("O1")
-            if O1index > 0 and O1index < s.sentenceList.index("S"): # Make sure O1 is non-sentence-initial and before S
-                self.adjustweight ("SP",1, self.r) #set towards Subject final
-            elif O1index > 0 and O1index > s.sentenceList.index("S"): #S occurs before 01
-                self.adjustweight("SP",0,self.r) #set towards Subject initial
+            # Make sure O1 is non-sentence-initial and before S
+            if O1index > 0 and O1index < s.sentenceList.index("S"):
+                # set towards Subject final
+                self.adjustweight ("SP",1, self.r)
+            # S occurs before 01
+            elif O1index > 0 and O1index > s.sentenceList.index("S"):
+                # set towards Subject initial
+                self.adjustweight("SP",0,self.r)
 
     # second parameter Head IP, VP, PP, etc
     def hipEtrigger(self, s):
         if "O3" in s.sentenceList and "P" in s.sentenceList:
             O3index = s.sentenceList.index("O3")
             Pindex = s.sentenceList.index("P")
-            if O3index > 0 and Pindex == O3index + 1: #O3 followed by P and not topicalized
+            # O3 followed by P and not topicalized
+            if O3index > 0 and Pindex == O3index + 1:
                 self.adjustweight ("HIP", 1, self.r)
             elif O3index > 0 and Pindex == O3index - 1:
                 self.adjustweight ("HIP", 0, self.r)
 
-        elif s.inflection == "IMP" and "O1" in s.sentenceList and "Verb" in s.sentenceList:  #If imperative, make sure Verb directly follows O1
+        # If imperative, make sure Verb directly follows O1
+        elif s.inflection == "IMP" and "O1" in s.sentenceList and "Verb" in s.sentenceList:
             if s.sentenceList.index("O1") == s.sentenceList.index("Verb") - 1:
                 self.adjustweight ("HIP", 1, self.r)
             elif s.sentenceList.index("Verb") == (s.sentenceList.index("O1") - 1):
@@ -49,9 +56,11 @@ class NDChild(object):
     # third parameter Head in CP
     def hcpEtrigger(self, s):
         if s.inflection == "Q":
-            if s.sentenceList[-1] == 'ka' or ("ka" not in s.sentenceList and s.sentenceList[-1] == "Aux"): #ka or aux last in question
+            # ka or aux last in question
+            if s.sentenceList[-1] == 'ka' or ("ka" not in s.sentenceList and s.sentenceList[-1] == "Aux"):
                 self.adjustweight("HCP", 1, self.r)
-            elif s.sentenceList[0] == "ka" or ("ka" not in s.sentenceList and s.sentenceList[0]=="Aux"): #ka or aux first in question
+            # ka or aux first in question
+            elif s.sentenceList[0] == "ka" or ("ka" not in s.sentenceList and s.sentenceList[0]=="Aux"):
                 self.adjustweight("HCP", 0, self.r)
 
     def nsEtrigger(self, s):
