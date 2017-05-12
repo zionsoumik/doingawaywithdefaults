@@ -8,11 +8,8 @@ from Sentence import Sentence
 
 #GLOBALS
 rate = 0.02
-# old rate conservativerate = 0.01
 conservativerate = 0.001
 threshold = .001
-
-infoFile = open('EngFrJapGerm.txt','rU')
 
 def pickASentence(languageDomain):
     return choice(languageDomain)
@@ -21,13 +18,16 @@ def createLD(language):
     languageDict = {'english': '611', 'french': '584', 'german': '2253', 'japanese': '3856'}
     langNum = languageDict[language]
     LD = []
-    for line in infoFile:
-        [grammStr, inflStr, sentenceStr] = line.split("\t")
-        sentenceStr = sentenceStr.rstrip()
-        # constructor creates sentenceList
-        s = Sentence([grammStr, inflStr, sentenceStr])
-        if grammStr == langNum:
-            LD.append(s)
+
+    with open('EngFrJapGerm.txt','r') as infoFile:
+        for line in infoFile:
+            [grammStr, inflStr, sentenceStr] = line.split("\t")
+            sentenceStr = sentenceStr.rstrip()
+            # constructor creates sentenceList
+            s = Sentence([grammStr, inflStr, sentenceStr])
+            if grammStr == langNum:
+                LD.append(s)
+
     return LD
 
 if __name__ == '__main__':
@@ -79,7 +79,5 @@ if __name__ == '__main__':
         results.append([aChild.grammar, ndr.thresholdDict])
         print "Finished Child {}".format(i)
     ndr.writeResults(results)
-
-    infoFile.close()
 
     print("--- %s seconds ---" % (time() - start))
