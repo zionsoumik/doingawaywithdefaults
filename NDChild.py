@@ -85,11 +85,13 @@ class NDChild(object):
                 self.adjustweight("WHM",0,self.r)
 
     def piEtrigger(self, s):
-        if "P" in s.sentenceList and "O3" in s.sentenceList:
-            if abs(s.indexString("P") - s.indexString("O3")) > 1:
+        pIndex = s.indexString("P")
+        O3Index = s.indexString("O3")
+        if pIndex > -1 and O3Index > -1:
+            if abs(pIndex - O3Index) > 1:
                 self.adjustweight("PI", 1, self.r)
 
-            elif ((s.indexString("P") + s.indexString("O3")) == 1):
+            elif ((pIndex + O3Index) == 1):
                 self.adjustweight ("PI",0,self.r)
 
     def tmEtrigger(self, s):
