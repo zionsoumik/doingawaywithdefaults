@@ -5,6 +5,7 @@ from argparse import ArgumentParser
 from NDresults import NDresults
 from NDChild import NDChild
 from Sentence import Sentence
+import sys
 
 #GLOBALS
 rate = 0.02
@@ -30,16 +31,13 @@ def createLD(language):
 
     return LD
 
-def runOneLanguage(numLearners, numberofsentences, language):
-    if numLearners < 1 or numberofsentences < 1:
-        print('Arguments must be positive integers')
-        sys.exit(2)
-
+def runSingleLearnerSimulation(languageDomain, numLearners, numberofsentences, language):
     # Make an instance of NDresults and write the header for the output file
     ndr = NDresults()
     ndr.writeOutputHeader(language, numLearners, numberofsentences)
 
-    LD = createLD(language)
+    # Create an array to store the simulation
+    # results to write to a csv after its ended
     results = []
     print("Starting the simulation...")
     for i in xrange(numLearners):
@@ -47,7 +45,7 @@ def runOneLanguage(numLearners, numberofsentences, language):
         aChild = NDChild(rate, conservativerate)
 
         for j in xrange(numberofsentences):
-            s = pickASentence(LD)
+            s = pickASentence(languageDomain)
             aChild.consumeSentence(s)
             # If a parameter value <= to the threshold for the first time,
             # this is recorded in ndr for writing output
@@ -56,6 +54,15 @@ def runOneLanguage(numLearners, numberofsentences, language):
         results.append([aChild.grammar, ndr.thresholdDict])
         print "Finished Child {}".format(i)
     ndr.writeResults(results)
+
+def runOneLanguage(numLearners, numberofsentences, language):
+    if numLearners < 1 or numberofsentences < 1:
+        print('Arguments must be positive integers')
+        sys.exit(2)
+
+    LD = createLD(language)
+
+    runSingleLearnerSimulation(LD, numLearners, numberofsentences, language)
 
 # Run random 100 language speed run
 def runSpeedTest(numLearners, numberofsentences):
@@ -84,26 +91,8 @@ def runSpeedTest(numLearners, numberofsentences):
     # Run 100 eChildren for each language
     for key, value in languageDict.iteritems():
         language = str(int(key, 2))
-        ndr = NDresults()
-        ndr.writeOutputHeader(language, numLearners, numberofsentences)
 
-        results = []
-        print("Starting the simulation...")
-        for i in xrange(numLearners):
-            ndr.resetThresholdDict()
-            aChild = NDChild(rate, conservativerate)
-
-            for j in xrange(numberofsentences):
-                s = pickASentence(value)
-                aChild.consumeSentence(s)
-                # If a parameter value <= to the threshold for the first time,
-                # this is recorded in ndr for writing output
-                ndr.checkIfParametersMeetThreshold(threshold, aChild.grammar, j)
-
-            results.append([aChild.grammar, ndr.thresholdDict])
-            print "Finished Child {}".format(i)
-        ndr.writeResults(results)
-
+        runSingleLearnerSimulation(value, numLearners, numberofsentences, language)
 
 if __name__ == '__main__':
     start = time()
