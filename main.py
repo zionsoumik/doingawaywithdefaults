@@ -62,15 +62,6 @@ def runSpeedTest(numLearners, numberofsentences):
     # Make dictionary containing first 100
     # language IDs from the full CoLAG domain
 
-    '''
-    with open('COLAG_Flat_GrammID_Binary_List.txt','r') as f:
-        content = f.readlines()
-    # you may also want to remove whitespace characters like `\n` at the end of each line
-    content = [x.strip() for x in content]
-    for i in range(0, 100):
-        binaryId, decimalId = content[i].split('\t')
-        languageDict[binaryId] = []
-    '''
     languageDict = {}
     with open('COLAG_Flat_GrammID_Binary_List.txt','r') as myfile:
         head = [next(myfile) for x in xrange(100)]
@@ -89,18 +80,6 @@ def runSpeedTest(numLearners, numberofsentences):
                 # constructor creates sentenceList
                 s = Sentence([grammStr, inflStr, sentenceStr])
                 languageDict[grammStr].append(s)
-
-    '''
-    with open('EngFrJapGerm.txt','r') as infoFile:
-        for line in infoFile:
-            [grammStr, inflStr, sentenceStr] = line.split("\t")
-            sentenceStr = sentenceStr.rstrip()
-            # constructor creates sentenceList
-            s = Sentence([grammStr, inflStr, sentenceStr])
-            if grammStr == langNum:
-                LD.append(s)
-    '''
-
 
     # Run 100 eChildren for each language
     for key, value in languageDict.iteritems():
