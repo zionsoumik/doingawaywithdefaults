@@ -94,6 +94,21 @@ def runSpeedTest(numLearners, numberofsentences):
 
         runSingleLearnerSimulation(value, numLearners, numberofsentences, language)
 
+def runAllCoLAGLanguages(numLearners, numberofsentences):
+    languageDict = {}
+    with open('COLAG_Flat_GrammID_Binary_List.txt', 'r') as sentencesFile:
+        for line in sentencesFile:
+            [grammStr, inflStr, sentenceStr] = line.split("\t")
+
+            sentenceStr = sentenceStr.rstrip()
+            # constructor creates sentenceList
+            s = Sentence([grammStr, inflStr, sentenceStr])
+            languageDict[grammStr].append(s)
+
+    for key, value in languageDict.iteritems():
+        language = str(int(key, 2))
+        runSingleLearnerSimulation(value, numLearners, numberofsentences, language)
+
 if __name__ == '__main__':
     start = time()
 
