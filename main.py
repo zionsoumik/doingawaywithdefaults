@@ -125,7 +125,6 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
     numLearners = 0
-    maxSentences = 0
 
     # Test whether certain command line arguments
     # can be converted to positive integers
@@ -133,7 +132,11 @@ if __name__ == '__main__':
     numberofsentences = args.integers[1]
     language = str(args.strings[0]).lower()
 
-    #runOneLanguage(numLearners, numberofsentences, language)
-    runSpeedTest(numLearners, numberofsentences)
+    if language == "alllanguages":
+        runAllCoLAGLanguages(numLearners, numberofsentences)
+    elif language == "speedtest":
+        runSpeedTest(numLearners, numberofsentences)
+    else:
+        runOneLanguage(numLearners, numberofsentences, language)  
 
     print("--- %s seconds ---" % (time() - start))
