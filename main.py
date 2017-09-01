@@ -91,7 +91,6 @@ def runSpeedTest(numLearners, numberofsentences):
     # Run 100 eChildren for each language
     for key, value in languageDict.iteritems():
         language = str(int(key, 2))
-
         runSingleLearnerSimulation(value, numLearners, numberofsentences, language)
 
 def runAllCoLAGLanguages(numLearners, numberofsentences):
