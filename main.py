@@ -1,7 +1,6 @@
 from time import time
 from random import choice
 from argparse import ArgumentParser
-from argparse import ArgumentParser
 from NDresults import NDresults
 from NDChild import NDChild
 from Sentence import Sentence
