@@ -30,6 +30,19 @@ def createLD(language):
 
     return LD
 
+def childLearnsLanguage(ndr, languageDomain):
+    ndr.resetThresholdDict()
+    aChild = NDChild(rate, conservativerate)
+
+    for j in xrange(numberofsentences):
+        s = pickASentence(languageDomain)
+        aChild.consumeSentence(s)
+        # If a parameter value <= to the threshold for the first time,
+        # this is recorded in ndr for writing output
+        ndr.checkIfParametersMeetThreshold(threshold, aChild.grammar, j)
+
+    return [aChild.grammar, ndr.thresholdDict]
+
 def runSingleLearnerSimulation(languageDomain, numLearners, numberofsentences, language):
     # Make an instance of NDresults and write the header for the output file
     ndr = NDresults()
@@ -37,21 +50,9 @@ def runSingleLearnerSimulation(languageDomain, numLearners, numberofsentences, l
 
     # Create an array to store the simulation
     # results to write to a csv after its ended
-    results = []
+
     print("Starting the simulation...")
-    for i in xrange(numLearners):
-        ndr.resetThresholdDict()
-        aChild = NDChild(rate, conservativerate)
-
-        for j in xrange(numberofsentences):
-            s = pickASentence(languageDomain)
-            aChild.consumeSentence(s)
-            # If a parameter value <= to the threshold for the first time,
-            # this is recorded in ndr for writing output
-            ndr.checkIfParametersMeetThreshold(threshold, aChild.grammar, j)
-
-        results.append([aChild.grammar, ndr.thresholdDict])
-        print "Finished Child {}".format(i)
+    results = [childLearnsLanguage(ndr, languageDomain) for x in range(numLearners)]
     ndr.writeResults(results)
 
 def runOneLanguage(numLearners, numberofsentences, language):
