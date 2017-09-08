@@ -4,7 +4,7 @@ from argparse import ArgumentParser
 from NDresults import NDresults
 from NDChild import NDChild
 from Sentence import Sentence
-import sys
+from sys import exit
 
 #GLOBALS
 rate = 0.02
@@ -58,7 +58,7 @@ def runSingleLearnerSimulation(languageDomain, int numLearners, int numberofsent
 def runOneLanguage(int numLearners, int numberofsentences, language):
     if numLearners < 1 or numberofsentences < 1:
         print('Arguments must be positive integers')
-        sys.exit(2)
+        exit(2)
 
     LD = createLD(language)
 
@@ -112,6 +112,8 @@ def runAllCoLAGLanguages(int numLearners, int numberofsentences):
         runSingleLearnerSimulation(value, numLearners, numberofsentences, language)
 
 def main_func():
+    start = time()
+
     # The argument keeps track of the mandatory arguments,
     # number of learners, max number of sentences, and target grammar
     parser = ArgumentParser(prog='Doing Away With Defaults', description='Set simulation parameters for learners')
@@ -138,7 +140,7 @@ def main_func():
     else:
         runOneLanguage(numLearners, numberofsentences, language)  
 
+    print("--- %s seconds ---" % (time() - start))    
+
 if __name__ == '__main__':
-    start = time()
     main_func()
-    print("--- %s seconds ---" % (time() - start))

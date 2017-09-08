@@ -4,7 +4,7 @@ from argparse import ArgumentParser
 from NDresults import NDresults
 from NDChild import NDChild
 from Sentence import Sentence
-import sys
+from sys import exit
 
 #GLOBALS
 rate = 0.02
@@ -59,7 +59,7 @@ def runSingleLearnerSimulation(languageDomain, numLearners, numberofsentences, l
 def runOneLanguage(numLearners, numberofsentences, language):
     if numLearners < 1 or numberofsentences < 1:
         print('Arguments must be positive integers')
-        sys.exit(2)
+        exit(2)
 
     LD = createLD(language)
 
