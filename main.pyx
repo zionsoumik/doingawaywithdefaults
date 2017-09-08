@@ -30,11 +30,10 @@ def createLD(language):
 
     return LD
 
-def childLearnsLanguage(ndr, languageDomain):
+def childLearnsLanguage(ndr, languageDomain, int numberofsentences):
     ndr.resetThresholdDict()
     aChild = NDChild(rate, conservativerate)
 
-    print numberofsentences
     for j in xrange(numberofsentences):
         s = pickASentence(languageDomain)
         aChild.consumeSentence(s)
@@ -44,7 +43,7 @@ def childLearnsLanguage(ndr, languageDomain):
 
     return [aChild.grammar, ndr.thresholdDict]
 
-def runSingleLearnerSimulation(languageDomain, numLearners, numberofsentences, language):
+def runSingleLearnerSimulation(languageDomain, int numLearners, int numberofsentences, language):
     # Make an instance of NDresults and write the header for the output file
     ndr = NDresults()
     ndr.writeOutputHeader(language, numLearners, numberofsentences)
@@ -56,7 +55,7 @@ def runSingleLearnerSimulation(languageDomain, numLearners, numberofsentences, l
     results = [childLearnsLanguage(ndr, languageDomain) for x in range(numLearners)]
     ndr.writeResults(results)
 
-def runOneLanguage(numLearners, numberofsentences, language):
+def runOneLanguage(int numLearners, int numberofsentences, language):
     if numLearners < 1 or numberofsentences < 1:
         print('Arguments must be positive integers')
         sys.exit(2)
@@ -66,7 +65,7 @@ def runOneLanguage(numLearners, numberofsentences, language):
     runSingleLearnerSimulation(LD, numLearners, numberofsentences, language)
 
 # Run random 100 language speed run
-def runSpeedTest(numLearners, numberofsentences):
+def runSpeedTest(int numLearners, int numberofsentences):
     # Make dictionary containing first 100
     # language IDs from the full CoLAG domain
 
@@ -94,7 +93,7 @@ def runSpeedTest(numLearners, numberofsentences):
         language = str(int(key, 2))
         runSingleLearnerSimulation(value, numLearners, numberofsentences, language)
 
-def runAllCoLAGLanguages(numLearners, numberofsentences):
+def runAllCoLAGLanguages(int numLearners, int numberofsentences):
     # Build a dictionary that contains the sentences that
     # correspond to every language
     languageDict = {}
@@ -112,9 +111,7 @@ def runAllCoLAGLanguages(numLearners, numberofsentences):
         language = str(int(key, 2))
         runSingleLearnerSimulation(value, numLearners, numberofsentences, language)
 
-if __name__ == '__main__':
-    start = time()
-
+def main_func():
     # The argument keeps track of the mandatory arguments,
     # number of learners, max number of sentences, and target grammar
     parser = ArgumentParser(prog='Doing Away With Defaults', description='Set simulation parameters for learners')
@@ -127,12 +124,11 @@ if __name__ == '__main__':
                                 'German=2253, French=584, Japanese=3856')
 
     args = parser.parse_args()
-    numLearners = 0
 
     # Test whether certain command line arguments
     # can be converted to positive integers
-    numLearners = args.integers[0]
-    numberofsentences = args.integers[1]
+    cdef int numLearners = args.integers[0]
+    cdef int numberofsentences = args.integers[1]
     language = str(args.strings[0]).lower()
 
     if language == "alllanguages":
@@ -142,4 +138,7 @@ if __name__ == '__main__':
     else:
         runOneLanguage(numLearners, numberofsentences, language)  
 
+if __name__ == '__main__':
+    start = time()
+    main_func()
     print("--- %s seconds ---" % (time() - start))
