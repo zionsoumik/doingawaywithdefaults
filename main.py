@@ -5,6 +5,7 @@ from NDresults import NDresults
 from NDChild import NDChild
 from Sentence import Sentence
 from sys import exit
+import random
 
 #GLOBALS
 rate = 0.02
@@ -34,7 +35,6 @@ def childLearnsLanguage(ndr, languageDomain):
     ndr.resetThresholdDict()
     aChild = NDChild(rate, conservativerate)
 
-    print numberofsentences
     for j in xrange(numberofsentences):
         s = pickASentence(languageDomain)
         aChild.consumeSentence(s)
@@ -51,7 +51,6 @@ def runSingleLearnerSimulation(languageDomain, numLearners, numberofsentences, l
 
     # Create an array to store the simulation
     # results to write to a csv after its ended
-
     print("Starting the simulation...")
     results = [childLearnsLanguage(ndr, languageDomain) for x in range(numLearners)]
     ndr.writeResults(results)
@@ -67,15 +66,17 @@ def runOneLanguage(numLearners, numberofsentences, language):
 
 # Run random 100 language speed run
 def runSpeedTest(numLearners, numberofsentences):
-    # Make dictionary containing first 100
+    # Make dictionary containing random 100
     # language IDs from the full CoLAG domain
 
     languageDict = {}
-    with open('COLAG_Flat_GrammID_Binary_List.txt','r') as myfile:
-        head = [next(myfile) for x in xrange(100)]
+    allLines = []
+    with open('COLAG_Flat_GrammID_Binary_List.txt','r') as myFile:
+        allLines = [line.strip() for line in myFile]
 
-    for line in head:
-        binaryId, decimalId = line.split('\t')
+    randomLineNumbers = random.sample(range(0, len(allLines)), 100)
+    for num in randomLineNumbers:
+        binaryId, decimalId = allLines[num].split('\t')
         languageDict[binaryId] = []
 
     # Collect the corresponding sentences for each language
