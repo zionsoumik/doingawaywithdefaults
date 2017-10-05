@@ -15,7 +15,7 @@ def pickASentence(languageDomain):
     return choice(languageDomain)
 
 def createLD(language):
-    languageDict = {'english': '611', 'french': '584', 'german': '2253', 'japanese': '3856'}
+    languageDict = {'french': '584'}
     langNum = languageDict[language]
     LD = []
 
@@ -30,9 +30,9 @@ def createLD(language):
 
     return LD
 
-def childLearnsLanguage(ndr, languageDomain):
+def childLearnsLanguage(ndr, languageDomain,language):
     ndr.resetThresholdDict()
-    aChild = NDChild(rate, conservativerate)
+    aChild = NDChild(rate, conservativerate,language)
 
     print numberofsentences
     for j in xrange(numberofsentences):
@@ -53,7 +53,7 @@ def runSingleLearnerSimulation(languageDomain, numLearners, numberofsentences, l
     # results to write to a csv after its ended
 
     print("Starting the simulation...")
-    results = [childLearnsLanguage(ndr, languageDomain) for x in range(numLearners)]
+    results = [childLearnsLanguage(ndr, languageDomain,language) for x in range(numLearners)]
     ndr.writeResults(results)
 
 def runOneLanguage(numLearners, numberofsentences, language):
