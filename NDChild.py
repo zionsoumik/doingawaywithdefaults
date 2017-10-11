@@ -26,12 +26,13 @@ class NDChild(object):
         # Check if O1 and S are in the sentence and sent is declarative
         if "O1" in s.sentenceList and "S" in s.sentenceList and s.inflection == "DEC":
             O1index = s.sentenceList.index("O1")
+            Sindex = s.sentenceList.index("S") # Sindex is position of S in sentList
             # Make sure O1 is non-sentence-initial and before S
             if O1index > 0 and O1index < s.sentenceList.index("S"):
                 # set towards Subject final
                 self.adjustweight ("SP",1, self.r)
             # S occurs before 01
-            elif O1index > 0 and O1index > s.sentenceList.index("S"):
+            elif Sindex > 0 and O1index > s.sentenceList.index("S"): # S cannot be Sent initial
                 # set towards Subject initial
                 self.adjustweight("SP",0,self.r)
 
