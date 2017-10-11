@@ -1,7 +1,7 @@
 class NDChild(object):
-    def __init__ (self, learningrate, conslearningrate):
+    def __init__ (self, learningrate, conslearningrate,language):
 
-        self.grammar = {"SP": .5, "HIP": .5, "HCP": .5, "OPT": .5, "NS": .5, "NT": .5,"WHM": .5, "PI": .5, "TM": .5, "VtoI": .5, "ItoC": .5,"AH": .5, "QInv": .5}
+        self.grammar = {"lang":language,"SP": .5, "HIP": .5, "HCP": .5, "OPT": .5, "NS": .5, "NT": .5,"WHM": .5, "PI": .5, "TM": .5, "VtoI": .5, "ItoC": .5,"AH": .5, "QInv": .5}
         self.r = learningrate #simulation will pass child a learning rate
         self.conservativerate = conslearningrate
 
