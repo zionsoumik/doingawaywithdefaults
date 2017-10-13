@@ -80,7 +80,7 @@ class NDChild(object):
 
     def whmEtrigger(self, s):
         if s.inflection == "Q" and "+WH" in s.sentenceStr:
-            if ("+WH" in s.sentenceList[0]) or ("P" == s.sentenceList[0] and "O3[+WH]" == s.sentenceList[1]):
+            if ("+WH" in s.sentenceList[0]) or ("P" in s.sentenceList[0] and "O3[+WH]" == s.sentenceList[1]):
                 self.adjustweight("WHM",1,self.conservativerate)
             else:
                 self.adjustweight("WHM",0,self.r)
@@ -102,7 +102,7 @@ class NDChild(object):
             self.adjustweight("TM",0,self.r)
 
     def VtoIEtrigger(self, s):
-        if "Verb" in s.sentenceList and "O1" in s.sentenceList:
+        if "Verb" in s.sentenceStr and "O1" in s.sentenceStr and "Aux" not in s.sentenceStr:
             o1index = s.indexString("O1")
             if o1index != 0 and abs(s.indexString("Verb") - o1index) > 1:
                 self.adjustweight("VtoI", 1, self.r)
