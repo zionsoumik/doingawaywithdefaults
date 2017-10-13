@@ -36,3 +36,5 @@ French=584, English=611, German=2253, and Japanese=3856
 ###Output
 The program will write simulation results to a csv to a folder whose name starts with the used language followed by the number of learners, and a timestamp. For example:
 English_100_32016-06-09T14.17.54.747187 will contain the results of simulation using 100 learners with English.
+
+This is a fork of the *doingawaywithdefaults* repository hosted by user kghowitt
