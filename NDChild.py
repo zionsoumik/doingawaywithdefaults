@@ -159,8 +159,8 @@ class NDChild(object):
 
         elif "Aux" in s.sentenceStr and self.grammar["AH"] <= 0.5:
             self.adjustweight ("AH",0,self.conservativerate)
-            if self.grammar["VtoI"] > 0.5: #If not affix hopping language, vtoi is either 0 or 1, but if evidence of vtoi towards 1 has alreadybeen observed, increase confidence 1VtoI given 0AH
-                self.adjustweight("VtoI", 1, self.conservativerate)
+            #if self.grammar["VtoI"] > 0.5: #If not affix hopping language, vtoi is either 0 or 1, but if evidence of vtoi towards 1 has alreadybeen observed, increase confidence 1VtoI given 0AH
+                #self.adjustweight("VtoI", 1, self.conservativerate)
 
     def adjustweight(self, parameter, direction, rate):
         if direction == 0:
