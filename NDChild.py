@@ -93,7 +93,7 @@ class NDChild(object):
                 self.adjustweight("PI", 1, self.r)
 
             elif ((pIndex + O3Index) == 1):
-                self.adjustweight ("PI",0,self.conservativer)
+                self.adjustweight ("PI",0,self.conservativerate)
 
     def tmEtrigger(self, s):
         if "[+WA]" in s.sentenceStr:
