@@ -102,7 +102,7 @@ class NDChild(object):
             self.adjustweight("TM",0,self.r)
 
     def VtoIEtrigger(self, s):
-        if "Verb" in s.sentenceStr and "O1" in s.sentenceStr and "Aux" not in s.sentenceStr:
+        if "Verb" in s.sentenceStr and "O1" in s.sentenceStr:
             o1index = s.indexString("O1")
             if o1index != 0 and abs(s.indexString("Verb") - o1index) > 1:
                 self.adjustweight("VtoI", 1, self.r)
